@@ -1,4 +1,5 @@
 import './Hero.css'
+import profilePhoto from '../assets/hero.png'
 
 export default function Hero() {
   return (
@@ -82,7 +83,7 @@ export default function Hero() {
 
         <div className="hero-avatar-wrap" aria-hidden="true">
           <div className="hero-avatar">
-            <span className="avatar-inner">RB</span>
+            <img src={profilePhoto} alt="Ruparel Bhakti" className="avatar-photo" />
           </div>
           <div className="avatar-ring" />
         </div>

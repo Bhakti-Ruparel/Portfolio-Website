@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import './Navbar.css'
 
 const NAV_LINKS = [
@@ -11,6 +12,10 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const location = useLocation()
+
+  // Determine if we're on the /repos page for active-link highlighting
+  const isReposPage = location.pathname === '/repos'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -21,10 +26,10 @@ export default function Navbar() {
   return (
     <header className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`} role="banner">
       <nav className="navbar-inner" aria-label="Main navigation">
-        <a href="#hero" className="navbar-logo" aria-label="Ruparel Bhakti home">
+        <Link to="/" className="navbar-logo" aria-label="Ruparel Bhakti home">
           <span className="logo-icon" aria-hidden="true">RB</span>
           <span className="logo-name">Ruparel Bhakti</span>
-        </a>
+        </Link>
 
         <ul className="navbar-links" role="list">
           {NAV_LINKS.map((link) => (
@@ -32,6 +37,16 @@ export default function Navbar() {
               <a href={link.href} className="nav-link">{link.label}</a>
             </li>
           ))}
+          {/* GitHub Repos page link — uses <Link> for client-side routing */}
+          <li>
+            <Link
+              to="/repos"
+              className={`nav-link nav-link--page ${isReposPage ? 'nav-link--active' : ''}`}
+              aria-current={isReposPage ? 'page' : undefined}
+            >
+              GitHub Repos
+            </Link>
+          </li>
         </ul>
 
         <a
@@ -68,6 +83,13 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <Link
+            to="/repos"
+            className={`mobile-link ${isReposPage ? 'mobile-link--active' : ''}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            GitHub Repos
+          </Link>
           <a
             href="https://github.com/Bhakti-Ruparel"
             target="_blank"

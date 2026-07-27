@@ -76,6 +76,30 @@
   color: #0f172a;
 }
 
+/* Page-route nav link (e.g. GitHub Repos) */
+.nav-link--page {
+  color: #475569;
+}
+
+/* Active state when currently on that route */
+.nav-link--active {
+  background: #ede9fe;
+  color: #4338ca;
+  font-weight: 700;
+}
+
+.nav-link--active:hover {
+  background: #ddd6fe;
+  color: #3730a3;
+}
+
+/* Mobile active state */
+.mobile-link--active {
+  background: #ede9fe;
+  color: #4338ca;
+  font-weight: 700;
+}
+
 .navbar-cta {
   padding: 8px 18px;
   border-radius: 999px;
