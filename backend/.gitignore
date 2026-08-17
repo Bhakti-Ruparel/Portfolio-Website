@@ -1,0 +1,9 @@
+# Dependencies
+node_modules/
+
+# Environment variables — contains DB credentials, never push to Git
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
