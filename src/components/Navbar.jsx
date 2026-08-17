@@ -9,13 +9,13 @@ const NAV_LINKS = [
   { label: 'Contact', href: '#contact' },
 ]
 
-export default function Navbar() {
+export default function Navbar({ todoActiveCount = 0 }) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
 
-  // Determine if we're on the /repos page for active-link highlighting
   const isReposPage = location.pathname === '/repos'
+  const isTodoPage = location.pathname === '/todo'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -37,7 +37,7 @@ export default function Navbar() {
               <a href={link.href} className="nav-link">{link.label}</a>
             </li>
           ))}
-          {/* GitHub Repos page link — uses <Link> for client-side routing */}
+          {/* GitHub Repos page link */}
           <li>
             <Link
               to="/repos"
@@ -45,6 +45,21 @@ export default function Navbar() {
               aria-current={isReposPage ? 'page' : undefined}
             >
               GitHub Repos
+            </Link>
+          </li>
+          {/* To-Do page link with active-count badge */}
+          <li>
+            <Link
+              to="/todo"
+              className={`nav-link nav-link--page ${isTodoPage ? 'nav-link--active' : ''}`}
+              aria-current={isTodoPage ? 'page' : undefined}
+            >
+              To-Do
+              {todoActiveCount > 0 && (
+                <span className="nav-todo-badge" aria-label={`${todoActiveCount} active tasks`}>
+                  {todoActiveCount}
+                </span>
+              )}
             </Link>
           </li>
         </ul>
@@ -89,6 +104,18 @@ export default function Navbar() {
             onClick={() => setMenuOpen(false)}
           >
             GitHub Repos
+          </Link>
+          <Link
+            to="/todo"
+            className={`mobile-link ${isTodoPage ? 'mobile-link--active' : ''}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            To-Do
+            {todoActiveCount > 0 && (
+              <span className="nav-todo-badge" aria-label={`${todoActiveCount} active tasks`}>
+                {todoActiveCount}
+              </span>
+            )}
           </Link>
           <a
             href="https://github.com/Bhakti-Ruparel"
