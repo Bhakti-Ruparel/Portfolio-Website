@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { apiFetch } from '../utils/api'
 import './Navbar.css'
 
 const NAV_LINKS = [
@@ -9,13 +10,16 @@ const NAV_LINKS = [
   { label: 'Contact', href: '#contact' },
 ]
 
-export default function Navbar({ todoActiveCount = 0 }) {
+export default function Navbar({ todoActiveCount = 0, isLoggedIn = false, onLogout }) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [userEmail, setUserEmail] = useState('')
   const location = useLocation()
+  const navigate = useNavigate()
 
   const isReposPage = location.pathname === '/repos'
-  const isTodoPage = location.pathname === '/todo'
+  const isTodoPage  = location.pathname === '/todo'
+  const isTasksPage = location.pathname === '/tasks'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -23,21 +27,42 @@ export default function Navbar({ todoActiveCount = 0 }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Fetch the logged-in user's email for the pill display.
+  // Re-runs whenever isLoggedIn changes (login / logout).
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setUserEmail('')
+      return
+    }
+    apiFetch('/me')
+      .then((data) => setUserEmail(data.email))
+      .catch(() => setUserEmail(''))
+  }, [isLoggedIn])
+
+  function handleLogout() {
+    onLogout()
+    navigate('/login')
+    setMenuOpen(false)
+  }
+
   return (
     <header className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`} role="banner">
       <nav className="navbar-inner" aria-label="Main navigation">
+
+        {/* ── Logo ── */}
         <Link to="/" className="navbar-logo" aria-label="Ruparel Bhakti home">
           <span className="logo-icon" aria-hidden="true">RB</span>
           <span className="logo-name">Ruparel Bhakti</span>
         </Link>
 
+        {/* ── Desktop links ── */}
         <ul className="navbar-links" role="list">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
               <a href={link.href} className="nav-link">{link.label}</a>
             </li>
           ))}
-          {/* GitHub Repos page link */}
+
           <li>
             <Link
               to="/repos"
@@ -47,7 +72,7 @@ export default function Navbar({ todoActiveCount = 0 }) {
               GitHub Repos
             </Link>
           </li>
-          {/* To-Do page link with active-count badge */}
+
           <li>
             <Link
               to="/todo"
@@ -62,18 +87,54 @@ export default function Navbar({ todoActiveCount = 0 }) {
               )}
             </Link>
           </li>
+
+          <li>
+            <Link
+              to="/tasks"
+              className={`nav-link nav-link--page ${isTasksPage ? 'nav-link--active' : ''}`}
+              aria-current={isTasksPage ? 'page' : undefined}
+            >
+              Tasks
+            </Link>
+          </li>
         </ul>
 
-        <a
-          href="https://github.com/Bhakti-Ruparel"
-          target="_blank"
-          rel="noreferrer"
-          className="navbar-cta"
-          aria-label="View GitHub profile"
-        >
-          GitHub
-        </a>
+        {/* ── Right side: auth controls + GitHub CTA ── */}
+        <div className="navbar-right">
+          {isLoggedIn ? (
+            <>
+              {userEmail && (
+                <span className="nav-user-pill" title={userEmail}>
+                  {userEmail}
+                </span>
+              )}
+              <button className="nav-logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="nav-auth-btn nav-auth-btn--ghost">
+                Login
+              </Link>
+              <Link to="/register" className="nav-auth-btn nav-auth-btn--solid">
+                Register
+              </Link>
+            </>
+          )}
 
+          <a
+            href="https://github.com/Bhakti-Ruparel"
+            target="_blank"
+            rel="noreferrer"
+            className="navbar-cta"
+            aria-label="View GitHub profile"
+          >
+            GitHub
+          </a>
+        </div>
+
+        {/* ── Burger (mobile) ── */}
         <button
           className="burger"
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -86,6 +147,7 @@ export default function Navbar({ todoActiveCount = 0 }) {
         </button>
       </nav>
 
+      {/* ── Mobile menu ── */}
       {menuOpen && (
         <div className="mobile-menu" role="navigation" aria-label="Mobile navigation">
           {NAV_LINKS.map((link) => (
@@ -98,6 +160,7 @@ export default function Navbar({ todoActiveCount = 0 }) {
               {link.label}
             </a>
           ))}
+
           <Link
             to="/repos"
             className={`mobile-link ${isReposPage ? 'mobile-link--active' : ''}`}
@@ -105,6 +168,7 @@ export default function Navbar({ todoActiveCount = 0 }) {
           >
             GitHub Repos
           </Link>
+
           <Link
             to="/todo"
             className={`mobile-link ${isTodoPage ? 'mobile-link--active' : ''}`}
@@ -112,11 +176,39 @@ export default function Navbar({ todoActiveCount = 0 }) {
           >
             To-Do
             {todoActiveCount > 0 && (
-              <span className="nav-todo-badge" aria-label={`${todoActiveCount} active tasks`}>
-                {todoActiveCount}
-              </span>
+              <span className="nav-todo-badge">{todoActiveCount}</span>
             )}
           </Link>
+
+          <Link
+            to="/tasks"
+            className={`mobile-link ${isTasksPage ? 'mobile-link--active' : ''}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            Tasks
+          </Link>
+
+          {/* Auth section in mobile menu */}
+          {isLoggedIn ? (
+            <>
+              {userEmail && (
+                <span className="mobile-link mobile-user-email">{userEmail}</span>
+              )}
+              <button className="mobile-link mobile-logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="mobile-link" onClick={() => setMenuOpen(false)}>
+                Login
+              </Link>
+              <Link to="/register" className="mobile-link mobile-cta" onClick={() => setMenuOpen(false)}>
+                Register
+              </Link>
+            </>
+          )}
+
           <a
             href="https://github.com/Bhakti-Ruparel"
             target="_blank"

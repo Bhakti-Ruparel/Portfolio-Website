@@ -1,59 +1,54 @@
 // server.js
-// Entry point of the application.
-// Responsibilities: configure Express, connect to MongoDB, start the HTTP server.
+// Entry point — configure Express, connect MongoDB, start server.
 
-// ── 1. Load environment variables from .env FIRST ────────────────────────────
-// This must be the very first line so that all other require()s can read
-// process.env.MONGO_URI, process.env.PORT, etc.
+// ── 1. Load .env variables FIRST ─────────────────────────────────────────────
 require('dotenv').config();
 
-// ── 2. Import packages ────────────────────────────────────────────────────────
+// ── 2. Imports ────────────────────────────────────────────────────────────────
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-// ── 3. Import our task router ─────────────────────────────────────────────────
+// ── 3. Route modules ──────────────────────────────────────────────────────────
 const taskRoutes = require('./routes/taskRoutes');
+const authRoutes = require('./routes/authRoutes');
 
-// ── 4. Create the Express application ────────────────────────────────────────
+// ── 4. Create app ─────────────────────────────────────────────────────────────
 const app = express();
 
-// ── 5. Middleware ─────────────────────────────────────────────────────────────
-// Middleware runs on EVERY request before it reaches a route handler.
-
-// cors() allows the React frontend (running on a different port, e.g. 5173)
-// to call this API without getting a "blocked by CORS policy" browser error.
-app.use(cors());
-
-// express.json() parses incoming requests with JSON bodies.
-// Without this, req.body would be undefined for POST/PUT requests.
-app.use(express.json());
+// ── 5. Middleware — order matters ─────────────────────────────────────────────
+app.use(cors());          // allow React (port 5173) to call this API
+app.use(express.json());  // parse JSON request bodies into req.body
 
 // ── 6. Routes ─────────────────────────────────────────────────────────────────
-// Mount the task router at /tasks.
-// All routes defined in taskRoutes.js become:
-//   GET    /tasks
-//   GET    /tasks/:id
-//   POST   /tasks
-//   PUT    /tasks/:id
-//   DELETE /tasks/:id
+// Auth routes: /register  /login  /me
+app.use('/', authRoutes);
+
+// Task CRUD routes — every route inside is JWT-protected via router.use(protect)
 app.use('/tasks', taskRoutes);
 
-// ── 7. Root route — quick health check ───────────────────────────────────────
+// ── 7. Health check ───────────────────────────────────────────────────────────
 app.get('/', (req, res) => {
   res.json({ success: true, message: 'Task Manager API is running' });
 });
 
-// ── 8. 404 handler — catches any route that was not matched above ─────────────
+// ── 8. 404 — no route matched ─────────────────────────────────────────────────
 app.use((req, res) => {
-  res.status(404).json({ success: false, message: 'Route not found' });
+  res.status(404).json({ message: 'Route not found' });
 });
 
-// ── 9. Connect to MongoDB, then start the server ──────────────────────────────
-// We connect to the database FIRST. Only after a successful connection do we
-// start listening for HTTP requests — this way no request can arrive before
-// the database is ready.
+// ── 9. Centralized error handler ──────────────────────────────────────────────
+// Express identifies a 4-argument function as an error handler.
+// Any route that calls next(err) lands here.
+// This ensures no unhandled error ever leaks a stack trace to the client.
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.error('❌ Unhandled error:', err.message);
+  const status = err.status || err.statusCode || 500;
+  res.status(status).json({ message: err.message || 'Internal server error' });
+});
 
+// ── 10. Connect to MongoDB, then start listening ──────────────────────────────
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
@@ -67,6 +62,5 @@ mongoose
   })
   .catch((error) => {
     console.error('❌  MongoDB connection failed:', error.message);
-    // Exit the process — there is no point running the server without a DB
     process.exit(1);
   });

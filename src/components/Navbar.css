@@ -170,3 +170,113 @@
   .burger { display: flex; }
   .mobile-menu { display: flex; }
 }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   AUTH NAV ADDITIONS
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* Right-side wrapper that groups auth controls + GitHub CTA */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Logged-out: ghost "Login" button */
+.nav-auth-btn {
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+
+.nav-auth-btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  color: #6366f1;
+}
+
+.nav-auth-btn--ghost:hover {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.7);
+}
+
+/* Logged-out: solid "Register" button */
+.nav-auth-btn--solid {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  border: 1px solid transparent;
+  color: #fff;
+}
+
+.nav-auth-btn--solid:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+/* Logged-in: email pill */
+.nav-user-pill {
+  display: inline-block;
+  padding: 5px 14px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #a5b4fc;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Logged-in: logout button */
+.nav-logout-btn {
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+
+.nav-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fecaca;
+}
+
+/* Mobile: user email display */
+.mobile-user-email {
+  color: #a5b4fc;
+  font-size: 0.85rem;
+  cursor: default;
+}
+
+/* Mobile: logout button (styled like a link) */
+.mobile-logout-btn {
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: #fca5a5;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.mobile-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+@media (max-width: 768px) {
+  .navbar-right { display: none; }
+}
