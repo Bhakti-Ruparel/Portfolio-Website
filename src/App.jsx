@@ -7,7 +7,7 @@ import About from './components/About'
 import Skills from './components/Skills'
 import Footer from './components/Footer'
 import Spinner from './components/Spinner'
-import { getToken, clearToken } from './utils/api'
+import { getToken, clearToken, apiFetch } from './utils/api'
 
 const Projects = lazy(() => import('./components/Projects'))
 const Contact = lazy(() => import('./components/Contact'))
@@ -16,6 +16,8 @@ const TodoPage = lazy(() => import('./pages/TodoPage'))
 const TasksPage = lazy(() => import('./pages/TasksPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 const RegisterPage = lazy(() => import('./pages/RegisterPage'))
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'))
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'))
 
 // ── localStorage key for the local (non-API) todo badge count ────────────────
 const TODO_STORAGE_KEY = 'portfolio-todos'
@@ -54,26 +56,37 @@ function Home() {
 
 // ── App ───────────────────────────────────────────────────────────────────────
 function App() {
-  // Local todo page badge count (localStorage-backed, not API)
   const [todoActiveCount, setTodoActiveCount] = useState(loadActiveCount)
-
-  // Auth state — derive initial value from localStorage so a page refresh
-  // doesn't log the user out.
   const [token, setToken_] = useState(() => getToken())
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     setTodoActiveCount(loadActiveCount())
   }, [])
 
-  // Called by LoginPage after a successful /login response.
+  useEffect(() => {
+    if (!token) {
+      setUser(null)
+      return
+    }
+
+    apiFetch('/me')
+      .then((data) => setUser(data.user))
+      .catch(() => {
+        clearToken()
+        setToken_(null)
+        setUser(null)
+      })
+  }, [token])
+
   function handleLogin(newToken) {
     setToken_(newToken)
   }
 
-  // Called by Navbar "Logout" button.
   function handleLogout() {
     clearToken()
     setToken_(null)
+    setUser(null)
   }
 
   return (
@@ -82,6 +95,7 @@ function App() {
         todoActiveCount={todoActiveCount}
         isLoggedIn={!!token}
         onLogout={handleLogout}
+        user={user}
       />
       <main>
         <Suspense fallback={<Spinner message="Loading page..." />}>
@@ -92,10 +106,10 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/repos" element={<GithubRepos />} />
             <Route path="/todo" element={<TodoPage onCountChange={setTodoActiveCount} />} />
-
-            {/* ── Auth routes ── */}
             <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
             {/* ── Protected route ── */}
             <Route

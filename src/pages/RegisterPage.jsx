@@ -4,6 +4,7 @@ import { apiFetch } from '../utils/api'
 import './auth.css'
 
 export default function RegisterPage() {
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
@@ -17,7 +18,14 @@ export default function RegisterPage() {
     setError('')
     setSuccess('')
 
-    // Client-side: confirm passwords match before hitting the API
+    if (!name.trim() || name.trim().length < 2) {
+      return setError('Name must be at least 2 characters long.')
+    }
+
+    if (!email.trim()) {
+      return setError('Email is required.')
+    }
+
     if (password !== confirm) {
       return setError('Passwords do not match.')
     }
@@ -29,14 +37,12 @@ export default function RegisterPage() {
     setLoading(true)
 
     try {
-      // POST /register → { message: "User registered successfully" }
-      const data = await apiFetch('/register', {
+      const data = await apiFetch('/api/auth/register', {
         method: 'POST',
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
       })
 
       setSuccess(data.message)
-      // Brief pause so user sees the success message, then redirect to login
       setTimeout(() => navigate('/login'), 1200)
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.')
@@ -49,12 +55,12 @@ export default function RegisterPage() {
     <div className="auth-page">
       <div className="auth-card">
         {/* Eyebrow */}
-        <span className="auth-eyebrow">PRACTICAL 7 — USER REGISTRATION</span>
+        <span className="auth-eyebrow">USER REGISTRATION</span>
 
         {/* Heading */}
         <h1 className="auth-heading">Create Account</h1>
         <p className="auth-subtext">
-          Register with bcrypt-hashed credentials stored in MongoDB Atlas.
+          Register with secure password hashing and MongoDB storage.
         </p>
 
         {/* Banners */}
@@ -71,6 +77,22 @@ export default function RegisterPage() {
 
         {/* Form */}
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
+          <div className="auth-field">
+            <label className="auth-label" htmlFor="name">
+              Full Name
+            </label>
+            <input
+              id="name"
+              className="auth-input"
+              type="text"
+              placeholder="Bhakti Ruparel"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoComplete="name"
+            />
+          </div>
+
           <div className="auth-field">
             <label className="auth-label" htmlFor="email">
               Email Address

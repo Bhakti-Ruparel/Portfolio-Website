@@ -39,7 +39,16 @@ export default function Navbar({ todoActiveCount = 0, isLoggedIn = false, onLogo
       .catch(() => setUserEmail(''))
   }, [isLoggedIn])
 
-  function handleLogout() {
+  async function handleLogout() {
+    try {
+      const hasToken = Boolean(localStorage.getItem('token'))
+      if (hasToken) {
+        await apiFetch('/api/auth/logout', { method: 'POST' })
+      }
+    } catch (error) {
+      // Ignore server-side logout errors and always clear the local session.
+    }
+
     onLogout()
     navigate('/login')
     setMenuOpen(false)

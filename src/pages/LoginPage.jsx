@@ -16,15 +16,14 @@ export default function LoginPage({ onLogin }) {
     setLoading(true)
 
     try {
-      // POST /login → { message, token }
-      const data = await apiFetch('/login', {
+      const data = await apiFetch('/api/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       })
 
-      setToken(data.token)   // store JWT in localStorage
-      onLogin(data.token)    // notify App.jsx so navbar updates immediately
-      navigate('/tasks')     // redirect to the protected tasks page
+      setToken(data.token)
+      onLogin(data.token)
+      navigate('/tasks')
     } catch (err) {
       setError(err.message || 'Login failed. Please try again.')
     } finally {
@@ -36,7 +35,7 @@ export default function LoginPage({ onLogin }) {
     <div className="auth-page">
       <div className="auth-card">
         {/* Eyebrow */}
-        <span className="auth-eyebrow">PRACTICAL 7 — AUTHENTICATION</span>
+        <span className="auth-eyebrow">AUTHENTICATION</span>
 
         {/* Heading */}
         <h1 className="auth-heading">Welcome Back</h1>
@@ -94,7 +93,13 @@ export default function LoginPage({ onLogin }) {
           </button>
         </form>
 
-        {/* Footer link */}
+        {/* Footer links */}
+        <p className="auth-footer-text">
+          <Link to="/forgot-password" className="auth-link">
+            Forgot password?
+          </Link>
+        </p>
+
         <p className="auth-footer-text">
           Don't have an account?{' '}
           <Link to="/register" className="auth-link">

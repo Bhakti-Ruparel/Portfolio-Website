@@ -22,6 +22,7 @@ app.use(express.json());  // parse JSON request bodies into req.body
 
 // ── 6. Routes ─────────────────────────────────────────────────────────────────
 // Auth routes: /register  /login  /me
+app.use('/api/auth', authRoutes);
 app.use('/', authRoutes);
 
 // Task CRUD routes — every route inside is JWT-protected via router.use(protect)

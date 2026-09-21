@@ -20,3 +20,9 @@ If you are developing a production application, we recommend using TypeScript wi
 This project includes the route-based lazy loading and Suspense optimization required for Practical 8.
 
 Documentation: [docs/practical-8-performance.md](docs/practical-8-performance.md)
+
+## Authentication System
+
+This project includes the complete authentication flow for registration, login, logout, password reset, and protected routes.
+
+Documentation: [docs/authentication.md](docs/authentication.md)
