@@ -1,19 +1,21 @@
-import { useState, useEffect } from 'react'
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { useState, useEffect, lazy, Suspense } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import './App.css'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
 import Skills from './components/Skills'
-import Projects from './components/Projects'
-import Contact from './components/Contact'
 import Footer from './components/Footer'
-import GithubRepos from './pages/GithubRepos'
-import TodoPage from './pages/TodoPage'
-import TasksPage from './pages/TasksPage'
-import LoginPage from './pages/LoginPage'
-import RegisterPage from './pages/RegisterPage'
+import Spinner from './components/Spinner'
 import { getToken, clearToken } from './utils/api'
+
+const Projects = lazy(() => import('./components/Projects'))
+const Contact = lazy(() => import('./components/Contact'))
+const GithubRepos = lazy(() => import('./pages/GithubRepos'))
+const TodoPage = lazy(() => import('./pages/TodoPage'))
+const TasksPage = lazy(() => import('./pages/TasksPage'))
+const LoginPage = lazy(() => import('./pages/LoginPage'))
+const RegisterPage = lazy(() => import('./pages/RegisterPage'))
 
 // ── localStorage key for the local (non-API) todo badge count ────────────────
 const TODO_STORAGE_KEY = 'portfolio-todos'
@@ -82,26 +84,30 @@ function App() {
         onLogout={handleLogout}
       />
       <main>
-        <Routes>
-          {/* ── Public routes ── */}
-          <Route path="/" element={<Home />} />
-          <Route path="/repos" element={<GithubRepos />} />
-          <Route path="/todo" element={<TodoPage onCountChange={setTodoActiveCount} />} />
+        <Suspense fallback={<Spinner message="Loading page..." />}>
+          <Routes>
+            {/* ── Public routes ── */}
+            <Route path="/" element={<Home />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/repos" element={<GithubRepos />} />
+            <Route path="/todo" element={<TodoPage onCountChange={setTodoActiveCount} />} />
 
-          {/* ── Auth routes ── */}
-          <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
-          <Route path="/register" element={<RegisterPage />} />
+            {/* ── Auth routes ── */}
+            <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+            <Route path="/register" element={<RegisterPage />} />
 
-          {/* ── Protected route ── */}
-          <Route
-            path="/tasks"
-            element={
-              <ProtectedRoute>
-                <TasksPage onCountChange={() => {}} />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+            {/* ── Protected route ── */}
+            <Route
+              path="/tasks"
+              element={
+                <ProtectedRoute>
+                  <TasksPage onCountChange={() => {}} />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Suspense>
       </main>
       <Footer />
     </div>
