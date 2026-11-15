@@ -1,4 +1,5 @@
 import './Footer.css'
+import { PROFILE, SOCIAL_LINKS } from '../data/portfolio'
 
 const year = new Date().getFullYear()
 
@@ -7,13 +8,13 @@ export default function Footer() {
     <footer className="footer" role="contentinfo">
       <div className="footer-inner">
         <div>
-          <p className="footer-brand">Ruparel Bhakti</p>
-          <p className="footer-copy">© {year} · Built with React &amp; Vite</p>
+          <p className="footer-brand">{PROFILE.name}</p>
+          <p className="footer-copy">AI/ML · MERN Stack · Marketing — © {year}</p>
         </div>
 
         <nav className="footer-links" aria-label="Footer social links">
           <a
-            href="https://github.com/Bhakti-Ruparel"
+            href={SOCIAL_LINKS.github}
             target="_blank"
             rel="noreferrer"
             className="footer-link"
@@ -25,7 +26,7 @@ export default function Footer() {
           </a>
 
           <a
-            href="https://linkedin.com/in/bhakti-ruparel"
+            href={SOCIAL_LINKS.linkedin}
             target="_blank"
             rel="noreferrer"
             className="footer-link"
@@ -33,6 +34,14 @@ export default function Footer() {
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+          </a>
+
+          <a href={SOCIAL_LINKS.email} className="footer-link" aria-label="Email">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="M22 6l-10 7L2 6" />
             </svg>
           </a>
         </nav>

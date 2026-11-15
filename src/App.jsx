@@ -4,9 +4,11 @@ import './App.css'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
+import Experience from './components/Experience'
 import Skills from './components/Skills'
 import Footer from './components/Footer'
 import Spinner from './components/Spinner'
+import ScrollManager from './components/ScrollManager'
 import { getToken, clearToken, apiFetch } from './utils/api'
 
 const Projects = lazy(() => import('./components/Projects'))
@@ -47,6 +49,7 @@ function Home() {
     <>
       <Hero />
       <About />
+      <Experience />
       <Skills />
       <Projects />
       <Contact />
@@ -70,7 +73,7 @@ function App() {
       return
     }
 
-    apiFetch('/me')
+    apiFetch('/api/auth/me')
       .then((data) => setUser(data.user))
       .catch(() => {
         clearToken()
@@ -91,6 +94,7 @@ function App() {
 
   return (
     <div className="app">
+      <ScrollManager />
       <Navbar
         todoActiveCount={todoActiveCount}
         isLoggedIn={!!token}
@@ -116,7 +120,7 @@ function App() {
               path="/tasks"
               element={
                 <ProtectedRoute>
-                  <TasksPage onCountChange={() => {}} />
+                  <TasksPage />
                 </ProtectedRoute>
               }
             />

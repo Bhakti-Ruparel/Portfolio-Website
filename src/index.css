@@ -1,8 +1,66 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   THEME TOKENS — the whole colour scheme lives here.
+   Dark charcoal base · warm off-white text · one violet accent · teal secondary.
+   Change a value here and every page follows.
+   ════════════════════════════════════════════════════════════════════════════ */
 :root {
+  /* Surfaces (darkest → lightest) */
+  --bg: #0a0b10;
+  --bg-alt: #0e1017;
+  --surface: #13161f;
+  --surface-2: #1a1e2a;
+  --surface-3: #232838;
+
+  /* Lines */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.15);
+
+  /* Text */
+  --text: #eeece8;
+  --text-muted: #a8adba;
+  --text-subtle: #7f8696;
+
+  /* Primary accent: violet */
+  --accent-rgb: 139, 92, 246;
+  --accent: #8b5cf6;
+  --accent-strong: #7c3aed;
+  --accent-deep: #6d28d9;
+  --accent-text: #c4b5fd;
+  --accent-soft: rgba(var(--accent-rgb), 0.12);
+  --accent-border: rgba(var(--accent-rgb), 0.32);
+
+  /* Secondary accent: teal (used sparingly) */
+  --accent-2-rgb: 45, 212, 191;
+  --accent-2: #2dd4bf;
+  --accent-2-text: #5eead4;
+
+  /* Status */
+  --success: #34d399;
+  --success-text: #6ee7b7;
+  --success-rgb: 52, 211, 153;
+  --danger: #f87171;
+  --danger-text: #fca5a5;
+  --danger-rgb: 248, 113, 113;
+  --warn: #fbbf24;
+  --warn-text: #fcd34d;
+
+  /* Signature gradients */
+  --gradient-text: linear-gradient(90deg, #c4b5fd 0%, #a78bfa 45%, #5eead4 100%);
+  --gradient-button: linear-gradient(135deg, var(--accent-strong) 0%, var(--accent-deep) 100%);
+  --page-bg:
+    radial-gradient(1100px 520px at 85% -10%, rgba(var(--accent-rgb), 0.16), transparent 60%),
+    radial-gradient(800px 480px at -10% 110%, rgba(var(--accent-2-rgb), 0.07), transparent 60%),
+    var(--bg);
+
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-glow: 0 10px 34px rgba(var(--accent-rgb), 0.28);
+  --nav-height: 72px;
+
   font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #0f172a;
+  color: var(--text);
+  color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -17,7 +75,32 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: linear-gradient(160deg, #f0f9ff 0%, #e0f2fe 40%, #ede9fe 100%);
+  background: var(--bg);
+  color: var(--text);
+}
+
+::selection {
+  background: rgba(var(--accent-rgb), 0.35);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+}
+
+/* Sections land BELOW the fixed navbar when scrolled to (#about, #projects…) */
+[id] {
+  scroll-margin-top: calc(var(--nav-height) + 12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 #root {
@@ -43,7 +126,7 @@ html {
 /* ── Page wrapper ─────────────────────────────────────────────────────────── */
 .todo-page {
   min-height: 100vh;
-  background: linear-gradient(140deg, #0f172a 0%, #1e293b 60%, #312e81 100%);
+  background: transparent;
   padding: 110px 24px 80px;
 }
 
@@ -60,9 +143,9 @@ html {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #818cf8;
-  background: rgba(99, 102, 241, 0.12);
-  border: 1px solid rgba(99, 102, 241, 0.25);
+  color: var(--accent-text);
+  background: rgba(var(--accent-rgb), 0.12);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
   padding: 4px 14px;
   border-radius: 999px;
   margin-bottom: 18px;
@@ -71,14 +154,14 @@ html {
 .todo-title {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
-  color: #f8fafc;
+  color: var(--text);
   margin-bottom: 12px;
   line-height: 1.15;
 }
 
 .todo-subtitle {
   font-size: 1rem;
-  color: #94a3b8;
+  color: var(--text-muted);
   line-height: 1.7;
 }
 
@@ -95,29 +178,29 @@ html {
   flex: 1 1 200px;
   padding: 12px 18px;
   background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(99, 102, 241, 0.28);
+  border: 1px solid rgba(var(--accent-rgb), 0.28);
   border-radius: 12px;
-  color: #e2e8f0;
+  color: var(--text);
   font-size: 0.95rem;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .todo-input::placeholder {
-  color: #475569;
+  color: var(--text-subtle);
 }
 
 .todo-input:focus {
-  border-color: rgba(99, 102, 241, 0.7);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.14);
+  border-color: rgba(var(--accent-rgb), 0.7);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.14);
 }
 
 .todo-date-input {
   padding: 12px 14px;
   background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(99, 102, 241, 0.28);
+  border: 1px solid rgba(var(--accent-rgb), 0.28);
   border-radius: 12px;
-  color: #e2e8f0;
+  color: var(--text);
   font-size: 0.9rem;
   outline: none;
   cursor: pointer;
@@ -133,13 +216,13 @@ html {
 }
 
 .todo-date-input:focus {
-  border-color: rgba(99, 102, 241, 0.7);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.14);
+  border-color: rgba(var(--accent-rgb), 0.7);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.14);
 }
 
 .todo-add-btn {
   padding: 12px 22px;
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  background: var(--gradient-button);
   color: #fff;
   font-size: 0.95rem;
   font-weight: 700;
@@ -178,9 +261,9 @@ html {
 .todo-filter-pill {
   padding: 6px 16px;
   border-radius: 999px;
-  border: 1px solid rgba(99, 102, 241, 0.28);
+  border: 1px solid rgba(var(--accent-rgb), 0.28);
   background: transparent;
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -188,22 +271,22 @@ html {
 }
 
 .todo-filter-pill:hover {
-  background: rgba(99, 102, 241, 0.12);
-  color: #e2e8f0;
+  background: rgba(var(--accent-rgb), 0.12);
+  color: var(--text);
 }
 
 .todo-filter-pill--active {
-  background: rgba(99, 102, 241, 0.22);
-  border-color: rgba(99, 102, 241, 0.6);
-  color: #a5b4fc;
+  background: rgba(var(--accent-rgb), 0.22);
+  border-color: rgba(var(--accent-rgb), 0.6);
+  color: var(--accent-text);
 }
 
 .todo-clear-btn {
   padding: 6px 16px;
   border-radius: 999px;
-  border: 1px solid rgba(239, 68, 68, 0.35);
+  border: 1px solid rgba(var(--danger-rgb), 0.35);
   background: transparent;
-  color: #fca5a5;
+  color: var(--danger-text);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -211,8 +294,8 @@ html {
 }
 
 .todo-clear-btn:hover {
-  background: rgba(239, 68, 68, 0.15);
-  color: #fecaca;
+  background: rgba(var(--danger-rgb), 0.15);
+  color: var(--danger-text);
 }
 
 /* ── Count summary ───────────────────────────────────────────────────────── */
@@ -220,7 +303,7 @@ html {
   max-width: 680px;
   margin: 0 auto 20px;
   font-size: 0.82rem;
-  color: #475569;
+  color: var(--text-subtle);
   font-weight: 500;
   letter-spacing: 0.03em;
 }
@@ -229,7 +312,7 @@ html {
   max-width: 680px;
   margin: 32px auto;
   text-align: center;
-  color: #475569;
+  color: var(--text-subtle);
   font-size: 0.95rem;
 }
 
@@ -251,7 +334,7 @@ html {
   gap: 12px;
   padding: 14px 16px;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(99, 102, 241, 0.18);
+  border: 1px solid rgba(var(--accent-rgb), 0.18);
   border-radius: 14px;
   transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
   cursor: default;
@@ -259,7 +342,7 @@ html {
 
 .todo-task:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(99, 102, 241, 0.35);
+  border-color: rgba(var(--accent-rgb), 0.35);
 }
 
 /* Completed task */
@@ -269,37 +352,37 @@ html {
 
 .todo-task--done .todo-task-title {
   text-decoration: line-through;
-  color: #64748b;
+  color: var(--text-subtle);
 }
 
 /* Overdue task */
 .todo-task--overdue {
-  border-color: rgba(239, 68, 68, 0.45);
-  background: rgba(239, 68, 68, 0.06);
+  border-color: rgba(var(--danger-rgb), 0.45);
+  background: rgba(var(--danger-rgb), 0.06);
 }
 
 .todo-task--overdue:hover {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.6);
+  background: rgba(var(--danger-rgb), 0.1);
+  border-color: rgba(var(--danger-rgb), 0.6);
 }
 
 /* Drag-and-drop states */
 .todo-task--dragging {
   opacity: 0.35;
-  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 8px 30px rgba(var(--accent-rgb), 0.3);
   cursor: grabbing;
 }
 
 .todo-task--dragover {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.45), 0 4px 20px rgba(99, 102, 241, 0.2);
-  background: rgba(99, 102, 241, 0.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.45), 0 4px 20px rgba(var(--accent-rgb), 0.2);
+  background: rgba(var(--accent-rgb), 0.1);
 }
 
 /* ── Drag handle ─────────────────────────────────────────────────────────── */
 .todo-drag-handle {
   font-size: 1.1rem;
-  color: #334155;
+  color: var(--surface-3);
   cursor: grab;
   flex-shrink: 0;
   line-height: 1;
@@ -308,7 +391,7 @@ html {
 }
 
 .todo-drag-handle:hover {
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 /* ── Checkbox ────────────────────────────────────────────────────────────── */
@@ -316,7 +399,7 @@ html {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-  accent-color: #6366f1;
+  accent-color: var(--accent);
   cursor: pointer;
   border-radius: 4px;
 }
@@ -334,7 +417,7 @@ html {
 .todo-task-title {
   font-size: 0.95rem;
   font-weight: 500;
-  color: #e2e8f0;
+  color: var(--text);
   word-break: break-word;
   cursor: text;
   transition: color 0.15s;
@@ -344,22 +427,22 @@ html {
 }
 
 .todo-task-title:hover {
-  background: rgba(99, 102, 241, 0.1);
-  color: #c7d2fe;
+  background: rgba(var(--accent-rgb), 0.1);
+  color: var(--accent-text);
 }
 
 .todo-task-title:focus {
   outline: none;
-  background: rgba(99, 102, 241, 0.14);
+  background: rgba(var(--accent-rgb), 0.14);
 }
 
 /* ── Inline edit input ───────────────────────────────────────────────────── */
 .todo-task-edit-input {
   font-size: 0.95rem;
   font-weight: 500;
-  color: #e2e8f0;
-  background: rgba(99, 102, 241, 0.14);
-  border: 1px solid rgba(99, 102, 241, 0.55);
+  color: var(--text);
+  background: rgba(var(--accent-rgb), 0.14);
+  border: 1px solid rgba(var(--accent-rgb), 0.55);
   border-radius: 6px;
   padding: 3px 8px;
   outline: none;
@@ -369,7 +452,7 @@ html {
 }
 
 .todo-task-edit-input:focus {
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.2);
 }
 
 /* ── Due date label ──────────────────────────────────────────────────────── */
@@ -379,19 +462,19 @@ html {
   gap: 5px;
   font-size: 0.75rem;
   font-weight: 500;
-  color: #64748b;
+  color: var(--text-subtle);
 }
 
 .todo-due-date--overdue {
-  color: #f87171;
+  color: var(--danger);
 }
 
 .todo-overdue-badge {
   display: inline-block;
   padding: 1px 7px;
-  background: rgba(239, 68, 68, 0.18);
-  color: #fca5a5;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(var(--danger-rgb), 0.18);
+  color: var(--danger-text);
+  border: 1px solid rgba(var(--danger-rgb), 0.3);
   border-radius: 999px;
   font-size: 0.68rem;
   font-weight: 700;
@@ -410,16 +493,16 @@ html {
   background: transparent;
   border: 1px solid transparent;
   border-radius: 8px;
-  color: #475569;
+  color: var(--text-subtle);
   font-size: 0.75rem;
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 
 .todo-delete-btn:hover {
-  background: rgba(239, 68, 68, 0.15);
-  color: #fca5a5;
-  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(var(--danger-rgb), 0.15);
+  color: var(--danger-text);
+  border-color: rgba(var(--danger-rgb), 0.3);
 }
 
 /* ── Navbar badge ────────────────────────────────────────────────────────── */
@@ -431,7 +514,7 @@ html {
   height: 18px;
   padding: 0 5px;
   margin-left: 5px;
-  background: #6366f1;
+  background: var(--accent);
   color: #fff;
   font-size: 0.68rem;
   font-weight: 800;

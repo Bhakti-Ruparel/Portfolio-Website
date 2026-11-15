@@ -1,5 +1,6 @@
 import './Hero.css'
 import profilePhoto from '../assets/hero.png'
+import { PROFILE, SOCIAL_LINKS } from '../data/portfolio'
 
 export default function Hero() {
   return (
@@ -17,13 +18,14 @@ export default function Hero() {
 
           <h1>
             Hi, I'm{' '}
-            <span className="hero-gradient-text">Ruparel Bhakti</span>
+            <span className="hero-gradient-text">{PROFILE.name}</span>
           </h1>
 
           <p className="hero-subtitle">
-            <strong>AI / Full-Stack Developer</strong> from Vadodara, India.
-            I build scalable AI and web applications with FastAPI, React.js, and data-driven engineering —
-            spanning AI product development, backend APIs, and modern frontend experiences.
+            <strong>{PROFILE.role}</strong> from Vadodara, India.
+            I build AI-powered and full-stack MERN applications — from machine learning models and
+            backend APIs to the React interfaces people actually use. I also enjoy the marketing side:
+            explaining what I build so people care about it.
           </p>
 
           <div className="hero-actions">
@@ -46,14 +48,14 @@ export default function Hero() {
               <span className="stat-label">Intern</span>
             </div>
             <div className="stat-item" role="listitem">
-              <span className="stat-value">FastAPI</span>
-              <span className="stat-label">+ React</span>
+              <span className="stat-value">MERN</span>
+              <span className="stat-label">+ Marketing</span>
             </div>
           </div>
 
           <div className="hero-social" role="list" aria-label="Social links">
             <a
-              href="https://github.com/Bhakti-Ruparel"
+              href={SOCIAL_LINKS.github}
               target="_blank"
               rel="noreferrer"
               className="social-link"
@@ -66,7 +68,7 @@ export default function Hero() {
               GitHub
             </a>
             <a
-              href="https://linkedin.com/in/bhakti-ruparel"
+              href={SOCIAL_LINKS.linkedin}
               target="_blank"
               rel="noreferrer"
               className="social-link"
@@ -83,7 +85,7 @@ export default function Hero() {
 
         <div className="hero-avatar-wrap" aria-hidden="true">
           <div className="hero-avatar">
-            <img src={profilePhoto} alt="Ruparel Bhakti" className="avatar-photo" />
+            <img src={profilePhoto} alt={PROFILE.name} className="avatar-photo" width="320" height="320" />
           </div>
           <div className="avatar-ring" />
         </div>

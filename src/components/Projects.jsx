@@ -1,29 +1,5 @@
 import './Projects.css'
-
-const PROJECTS = [
-  {
-    icon: '🏭',
-    tag: 'AI · Production',
-    title: 'AI for Industrial Knowledge',
-    description:
-      'A production-ready AI platform for industrial knowledge workflows, focused on prompt automation and scalable AI-assisted processes.',
-    tech: ['React.js', 'FastAPI', 'Python', 'LLM', 'Supabase'],
-    link: 'https://github.com/Bhakti-Ruparel',
-    demo: 'https://ai-for-industrial-knowledge-intelli.vercel.app/',
-    featured: true,
-  },
-  {
-    icon: '🔍',
-    tag: 'DevOps · AI',
-    title: 'Unwire AI Insights',
-    description:
-      'Open-source DevOps automation platform using FastAPI, React.js, and Docker for infrastructure monitoring and AI-driven analysis.',
-    tech: ['FastAPI', 'React.js', 'Docker', 'Python'],
-    link: 'https://github.com/Bhakti-Ruparel/unwire-ai-insights',
-    demo: '',
-    featured: false,
-  },
-]
+import { PROJECTS, SOCIAL_LINKS } from '../data/portfolio'
 
 export default function Projects() {
   return (
@@ -31,7 +7,7 @@ export default function Projects() {
       <span className="section-label" aria-hidden="true">Projects</span>
       <h2 className="section-title" id="projects-heading">Things I've Built</h2>
       <p className="section-sub">
-        A selection of AI and web projects — from production platforms to open-source tooling.
+        AI, machine learning and backend systems — each one started with a real problem.
       </p>
 
       <div className="projects-grid">
@@ -50,11 +26,13 @@ export default function Projects() {
             <h3 className="project-title">{project.title}</h3>
             <p className="project-desc">{project.description}</p>
 
-            <ul className="project-tech" aria-label="Technologies used" role="list">
-              {project.tech.map((t) => (
-                <li key={t} className="tech-tag" role="listitem">{t}</li>
-              ))}
-            </ul>
+            {project.tech.length > 0 && (
+              <ul className="project-tech" aria-label="Technologies used" role="list">
+                {project.tech.map((t) => (
+                  <li key={t} className="tech-tag" role="listitem">{t}</li>
+                ))}
+              </ul>
+            )}
 
             <div className="project-actions">
               <a
@@ -88,7 +66,7 @@ export default function Projects() {
       <div className="projects-cta">
         <p>Want to see more?</p>
         <a
-          href="https://github.com/Bhakti-Ruparel"
+          href={SOCIAL_LINKS.github}
           target="_blank"
           rel="noreferrer"
           className="btn-more"

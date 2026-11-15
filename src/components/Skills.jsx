@@ -1,43 +1,5 @@
 import './Skills.css'
-
-const SKILL_CATEGORIES = [
-  {
-    icon: '⚡',
-    title: 'Languages',
-    variant: '',
-    skills: ['Python', 'JavaScript', 'Java', 'SQL', 'HTML / CSS'],
-  },
-  {
-    icon: '🖥️',
-    title: 'Frontend',
-    variant: 'chip--blue',
-    skills: ['React.js', 'Vite', 'Responsive Design', 'CSS Animations'],
-  },
-  {
-    icon: '🔧',
-    title: 'Backend',
-    variant: 'chip--green',
-    skills: ['FastAPI', 'Node.js', 'REST APIs', 'Supabase'],
-  },
-  {
-    icon: '🤖',
-    title: 'AI / ML',
-    variant: 'chip--orange',
-    skills: ['Machine Learning', 'Prompt Engineering', 'NumPy', 'Pandas'],
-  },
-  {
-    icon: '🛠️',
-    title: 'Tools & DevOps',
-    variant: 'chip--blue',
-    skills: ['Git', 'GitHub', 'Docker', 'VS Code', 'Postman'],
-  },
-  {
-    icon: '🗄️',
-    title: 'Databases',
-    variant: '',
-    skills: ['PostgreSQL', 'Supabase', 'MySQL'],
-  },
-]
+import { SKILL_CATEGORIES } from '../data/portfolio'
 
 export default function Skills() {
   return (
@@ -45,7 +7,7 @@ export default function Skills() {
       <span className="section-label" aria-hidden="true">Skills</span>
       <h2 className="section-title" id="skills-heading">Technical Skills</h2>
       <p className="section-sub">
-        My toolkit across AI, backend engineering, and modern web development.
+        My toolkit across AI/ML, the MERN stack, and the tools I use to ship.
       </p>
 
       <div className="skills-categories">

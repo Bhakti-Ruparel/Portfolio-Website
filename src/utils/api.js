@@ -2,33 +2,49 @@
 // Central fetch wrapper for all backend calls.
 //
 // Features:
-//   1. Automatically attaches Authorization: Bearer <token> when a token exists.
-//   2. Any 401 response clears the stored token and redirects to /login.
-//   3. All callers get back the parsed JSON body (or throw on non-OK responses).
+//   1. Base URL comes from VITE_API_URL (build-time env), so the same code works
+//      locally, inside Docker (nginx proxies /api) and on Vercel.
+//   2. Automatically attaches Authorization: Bearer <token> when a token exists.
+//   3. A 401 on a request that SENT a token means the session is invalid:
+//      the token is cleared and the user is sent to /login.
+//      A 401 without a token (e.g. wrong password on /login) is just an error
+//      and its message is shown to the user.
+//   4. Network failures and non-JSON responses become readable errors.
 
-const BASE_URL = 'http://localhost:5000';
+// `??` (not `||`) so that VITE_API_URL="" means "same origin" (used in Docker).
+export const BASE_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:5000').replace(/\/$/, '');
+
+const TOKEN_KEY = 'token';
 
 export function getToken() {
-  return localStorage.getItem('token');
+  return localStorage.getItem(TOKEN_KEY);
 }
 
 export function setToken(token) {
-  localStorage.setItem('token', token);
+  localStorage.setItem(TOKEN_KEY, token);
 }
 
 export function clearToken() {
-  localStorage.removeItem('token');
+  localStorage.removeItem(TOKEN_KEY);
+}
+
+export class ApiError extends Error {
+  constructor(status, message, details) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.details = details;
+  }
 }
 
 /**
  * apiFetch(path, options)
  *
- * Thin wrapper around window.fetch.
- * path    — e.g. '/tasks' or '/login'
- * options — standard fetch init object (method, body, headers, …)
+ * path    — e.g. '/api/tasks'
+ * options — standard fetch init object (method, body, headers, signal, …)
  *
- * Returns: parsed JSON body
- * Throws:  { status, message } on non-2xx responses
+ * Returns: parsed JSON body (or null for empty responses)
+ * Throws:  ApiError { status, message } on failure
  */
 export async function apiFetch(path, options = {}) {
   const token = getToken();
@@ -38,30 +54,38 @@ export async function apiFetch(path, options = {}) {
     ...(options.headers || {}),
   };
 
-  // Attach the token if we have one
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers.Authorization = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${BASE_URL}${path}`, {
-    ...options,
-    headers,
-  });
+  let res;
+  try {
+    res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
+  } catch (err) {
+    if (err.name === 'AbortError') throw err;
+    throw new ApiError(0, 'Cannot reach the server. Is the backend running?');
+  }
 
-  // Global 401 handler — clear token and bounce to login
-  if (res.status === 401) {
+  let data = null;
+  const text = await res.text();
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = { message: text.slice(0, 200) };
+    }
+  }
+
+  if (res.status === 401 && token) {
     clearToken();
-    window.location.href = '/login';
-    // Return a rejected promise so callers don't try to use the response
-    return Promise.reject({ status: 401, message: 'Session expired. Please log in again.' });
+    if (window.location.pathname !== '/login') {
+      window.location.href = '/login';
+    }
+    throw new ApiError(401, 'Session expired. Please log in again.');
   }
-
-  // Parse body — backend always sends JSON
-  const data = await res.json();
 
   if (!res.ok) {
-    // Throw so callers can catch and display the error message
-    throw { status: res.status, message: data.message || 'Something went wrong' };
+    throw new ApiError(res.status, data?.message || `Request failed (${res.status})`, data?.errors);
   }
 
   return data;

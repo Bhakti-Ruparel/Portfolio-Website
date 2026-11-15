@@ -1,7 +1,3 @@
-.about {
-  background: white;
-}
-
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -9,10 +5,15 @@
 }
 
 .about-card {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 18px;
   padding: 24px 28px;
+  transition: border-color 0.2s;
+}
+
+.about-card:hover {
+  border-color: var(--border-strong);
 }
 
 .about-card-icon {
@@ -24,7 +25,7 @@
 .about-card h3 {
   font-size: 1rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--text);
   margin-bottom: 14px;
 }
 
@@ -38,42 +39,78 @@
 
 .about-item-title {
   font-weight: 700;
-  color: #0f172a;
-  font-size: 0.9rem;
+  color: var(--text);
+  font-size: 0.92rem;
   margin-bottom: 3px;
+}
+
+.about-item-title a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent-border);
 }
 
 .about-item-meta {
   font-size: 0.82rem;
-  color: #6366f1;
+  color: var(--accent-text);
   font-weight: 600;
   margin-bottom: 4px;
 }
 
 .about-item-desc {
-  font-size: 0.85rem;
-  color: #64748b;
+  font-size: 0.86rem;
+  color: var(--text-muted);
   line-height: 1.6;
 }
 
 .about-intro {
   grid-column: 1 / -1;
+  border-left: 3px solid var(--accent);
 }
 
 .about-intro-text {
-  font-size: 1.05rem;
-  color: #475569;
-  line-height: 1.8;
+  font-size: 1.08rem;
+  color: var(--text-muted);
+  line-height: 1.85;
+}
+
+.about-intro-text--spaced {
+  margin-top: 12px;
 }
 
 .highlight-tag {
   display: inline-block;
-  background: #ede9fe;
-  color: #4f46e5;
+  background: var(--accent-soft);
+  color: var(--accent-text);
   padding: 1px 8px;
   border-radius: 6px;
   font-weight: 600;
-  font-size: 0.9em;
+  font-size: 0.92em;
+}
+
+.about-subheading {
+  margin-top: 20px;
+}
+
+.achievement-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.achievement-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.achievement-icon {
+  font-size: 1.2rem;
+  line-height: 1.4;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {

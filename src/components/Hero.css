@@ -10,7 +10,7 @@
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(140deg, #0f172a 0%, #1e293b 45%, #312e81 100%);
+  background: transparent;
   z-index: 0;
 }
 
@@ -18,7 +18,7 @@
   position: absolute;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.2) 0%, transparent 70%);
   top: -100px;
   right: -100px;
   z-index: 0;
@@ -29,7 +29,7 @@
   position: absolute;
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.15) 0%, transparent 70%);
   bottom: 0;
   left: 100px;
   z-index: 0;
@@ -56,8 +56,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(99, 102, 241, 0.15);
-  border: 1px solid rgba(99, 102, 241, 0.35);
+  background: rgba(var(--accent-rgb), 0.15);
+  border: 1px solid rgba(var(--accent-rgb), 0.35);
   border-radius: 999px;
   padding: 6px 14px;
   margin-bottom: 24px;
@@ -67,14 +67,14 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #22c55e;
+  background: var(--success);
   animation: pulse 2s infinite;
 }
 
 .badge-text {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #a5b4fc;
+  color: var(--accent-text);
   letter-spacing: 0.04em;
 }
 
@@ -86,13 +86,13 @@
 .hero h1 {
   font-size: clamp(2.4rem, 5vw, 4rem);
   font-weight: 800;
-  color: #f8fafc;
+  color: var(--text);
   line-height: 1.1;
   margin-bottom: 8px;
 }
 
 .hero-gradient-text {
-  background: linear-gradient(90deg, #a5b4fc, #818cf8);
+  background: var(--gradient-text);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -100,13 +100,13 @@
 
 .hero-subtitle {
   font-size: 1.05rem;
-  color: #94a3b8;
+  color: var(--text-muted);
   margin-bottom: 28px;
   line-height: 1.75;
 }
 
 .hero-subtitle strong {
-  color: #cbd5e1;
+  color: var(--text);
   font-weight: 600;
 }
 
@@ -123,17 +123,17 @@
   gap: 8px;
   padding: 13px 24px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #6366f1, #4f46e5);
+  background: var(--gradient-button);
   color: #ffffff;
   font-weight: 700;
   font-size: 0.95rem;
   transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.35);
 }
 
 .btn-hero-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 8px 28px rgba(var(--accent-rgb), 0.5);
 }
 
 .btn-hero-secondary {
@@ -144,7 +144,7 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #e2e8f0;
+  color: var(--text);
   font-weight: 600;
   font-size: 0.95rem;
   transition: background 0.2s, transform 0.2s;
@@ -171,14 +171,14 @@
 .stat-value {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #f1f5f9;
+  color: var(--text);
   line-height: 1;
 }
 
 .stat-label {
   font-size: 0.78rem;
   font-weight: 500;
-  color: #64748b;
+  color: var(--text-subtle);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -197,7 +197,7 @@
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 0.85rem;
   font-weight: 600;
   transition: background 0.2s, color 0.2s, transform 0.2s;
@@ -205,7 +205,7 @@
 
 .social-link:hover {
   background: rgba(255, 255, 255, 0.14);
-  color: #e2e8f0;
+  color: var(--text);
   transform: translateY(-2px);
 }
 
@@ -222,11 +222,11 @@
   width: 220px;
   height: 220px;
   border-radius: 28px;
-  background: #0f172a;
+  background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 20px 60px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 20px 60px rgba(var(--accent-rgb), 0.35);
   position: relative;
   overflow: hidden;
 }
@@ -243,7 +243,7 @@
   position: absolute;
   inset: -12px;
   border-radius: 36px;
-  border: 2px solid rgba(99, 102, 241, 0.3);
+  border: 2px solid rgba(var(--accent-rgb), 0.3);
   animation: ring-spin 8s linear infinite;
 }
 
@@ -262,7 +262,7 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  color: #475569;
+  color: var(--text-subtle);
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   animation: bounce 2s ease-in-out infinite;

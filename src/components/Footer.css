@@ -1,5 +1,5 @@
 .footer {
-  background: #0f172a;
+  background: var(--bg);
   padding: 32px 24px;
 }
 
@@ -16,12 +16,12 @@
 .footer-brand {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #f8fafc;
+  color: var(--text);
 }
 
 .footer-copy {
   font-size: 0.82rem;
-  color: #64748b;
+  color: var(--text-subtle);
   margin-top: 4px;
 }
 
@@ -38,13 +38,13 @@
   height: 36px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.08);
-  color: #94a3b8;
+  color: var(--text-muted);
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
 .footer-link:hover {
   background: rgba(255, 255, 255, 0.15);
-  color: #f8fafc;
+  color: var(--text);
   transform: translateY(-2px);
 }
 
